@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 #include "LedControl.h"
 #include <LiquidCrystal.h>
 #include "Interactionable.h"
@@ -40,3 +38,5 @@ public:
 
 	virtual ~Program();
 };
+
+#endif

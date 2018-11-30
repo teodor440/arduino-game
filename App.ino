@@ -1,3 +1,8 @@
+#include "Program.h"
+#include "GameSelector.h"
+#include "Snake.h"
+#include "StarGame.h"
+
 #define VERTICAL_PIN A0
 #define HORIZONTAL_PIN A1
 #define CLICK_PIN 2
@@ -14,7 +19,7 @@
 #define D7 4
 
 #define BUTTON 3
-/*
+
 // Joystick controller (analog analog digital)
 Joystick joystick = Joystick(HORIZONTAL_PIN, VERTICAL_PIN, CLICK_PIN);
 // Matrix controller
@@ -31,7 +36,7 @@ void setup() {
 	matrixController.shutdown(0, false); // turn off power saving, enables display
 	matrixController.setIntensity(0, 2); // sets brightness (0~15 possible values)
 	matrixController.clearDisplay(0);// clear screen
-	lcdController.begin(lcd_cols, lcd_rows);
+	lcdController.begin(LCD_COLS, LCD_ROWS);
 	// Set current running interface
 	currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, BUTTON);
 	pinMode(VERTICAL_PIN, INPUT);
@@ -42,15 +47,15 @@ void loop() {
 	uint8_t action = currentRunningProgram->run();
 	switch (action)
 	{
-	case program_selector:
+	case PROGRAM_SELECTOR:
 		delete currentRunningProgram;
 		currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, BUTTON);
 		break;
-	case snake:
+	case SNAKE:
 		delete currentRunningProgram;
 		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, BUTTON, 3, 3);
 		break;
-	case star:
+	case STAR:
 		delete currentRunningProgram;
 		currentRunningProgram = (Program*) new Star(&matrixController, &lcdController, &joystick, BUTTON);
 		break;
@@ -58,6 +63,3 @@ void loop() {
 		break;
 	}
 }
-*/
-void setup() {}
-void loop() {}

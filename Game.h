@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 #include "Program.h"
 
 class Game : public Program {
@@ -20,3 +18,6 @@ public:
 	virtual void init() = 0;
 	virtual void onNewFrame() = 0;
 };
+
+#endif
+

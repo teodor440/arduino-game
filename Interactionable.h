@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 #include "Utils.h"
 #include "Joystick.h"
 
@@ -43,3 +41,5 @@ public:
 	static void handleClickInterrupt();
 	static void handleButtonInterrupt();
 };
+
+#endif

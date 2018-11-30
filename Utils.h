@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 class Point {
 public:
 	uint8_t x, y;
@@ -75,3 +73,5 @@ void LinkedList<T>::clear() {
 	}
 	this->length = 0;
 }
+
+#endif

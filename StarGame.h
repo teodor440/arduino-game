@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 #include "Game.h"
 
 class Star : public Game {
@@ -28,3 +26,5 @@ public:
 
 	virtual uint8_t run();
 };
+
+#endif

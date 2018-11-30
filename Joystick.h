@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 class Joystick {
 private:
 	uint8_t Hpin, Vpin, Cpin;
@@ -21,4 +19,6 @@ public:
 	int getY();
 	void setClickInterruptRoutine(void(*routine)());
 };
+
+#endif
 

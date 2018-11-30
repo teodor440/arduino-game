@@ -7,8 +7,6 @@
 	#include "WProgram.h"
 #endif
 
-#endif
-
 #include "Program.h"
 
 // TODO DRAW SHIT ON MATRIX
@@ -39,3 +37,5 @@ public:
 
 	virtual uint8_t run();
 };
+
+#endif
