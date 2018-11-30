@@ -11,9 +11,9 @@ void Program::printMessage(String message, uint8_t row = 0) {
 	Serial.print("Printed on lcd " + message + " on row " + row);
 
 	this->lcdcontroller->setCursor(0, row);
-	char blank[lcd_cols + 1];
-	for (int i = 0; i < lcd_cols; i++) blank[i] = ' ';
-	blank[lcd_cols] = 0;
+	char blank[LCD_COLS + 1];
+	for (int i = 0; i < LCD_COLS; i++) blank[i] = ' ';
+	blank[LCD_COLS] = 0;
 	this->lcdcontroller->print(blank);
 
 	this->lcdcontroller->setCursor(0, row);

@@ -1,98 +1,6 @@
-#include "Program.h"
-#include "Utils.h"
-
-class Game : public Program{
-protected:
-	bool shutdownTrigger = false;
-	uint8_t frameCount = 0;
-public:
-	Game(LedControl*, LiquidCrystal*, Joystick*, uint8_t button);
-	virtual void init() = 0;
-	virtual void onNewFrame() = 0;
-};
-
-
-#define game_count 2
-#define snake 2
-#define star 3
-#define program_selector 1
-#define current_program 0
-// TODO DRAW SHIT ON MATRIX
-class GameSelector : Program {
-private:
-	const uint8_t gamesCount = game_count;
-	String gameNames[game_count] = {"Snake", "Star Shit"};
-	uint8_t gamesMapCodes[game_count] = {snake, star};
-	uint8_t images[game_count][30] = {
-		{0, 0},
-		{1, 1}
-	};
-
-	uint8_t currentSelectedIndex;
-
-	void changeState(uint8_t state_index);
-	void advanceState();
-public:
-	GameSelector(LedControl*, LiquidCrystal*, Joystick*, uint8_t button);
-
-	virtual void onClick();
-	virtual void onDoubleClick();
-	virtual void onLeftGesture(uint8_t);
-	virtual void onRightGesture(uint8_t);
-	virtual void onUpGesture(uint8_t);
-	virtual void onDownGesture(uint8_t);
-	virtual void onButtonPressed();
-
-	virtual uint8_t run();
-};
-
-class Snake : public Game{
-private:
-	LinkedList<Point> tail;
-	Point food;
-public:
-	uint8_t direction;
-	Snake(LedControl*, LiquidCrystal*, Joystick*, uint8_t button, uint8_t start_x, uint8_t start_y);
-	LinkedList<Point> getSnake();
-	LinkedList<Point> getFoodAsDrawable();
-
-	virtual void init();
-	virtual void onNewFrame();
-
-	virtual void onClick();
-	virtual void onDoubleClick();
-	virtual void onLeftGesture(uint8_t);
-	virtual void onRightGesture(uint8_t);
-	virtual void onUpGesture(uint8_t);
-	virtual void onDownGesture(uint8_t);
-	virtual void onButtonPressed();
-
-	virtual uint8_t run();
-};
-
-class Star : public Game {
-public:
-	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button);
-
-	virtual void init();
-	virtual void onNewFrame();
-
-	virtual void onClick();
-	virtual void onDoubleClick();
-	virtual void onLeftGesture(uint8_t);
-	virtual void onRightGesture(uint8_t);
-	virtual void onUpGesture(uint8_t);
-	virtual void onDownGesture(uint8_t);
-	virtual void onButtonPressed();
-
-	virtual uint8_t run();
-};
-
-
-
-#define vertical_pin A0
-#define horizontal_pin A1
-#define click_pin 2
+#define VERTICAL_PIN A0
+#define HORIZONTAL_PIN A1
+#define CLICK_PIN 2
 
 #define MATRIX_DIN 12
 #define MATRIX_CS 11
@@ -105,10 +13,10 @@ public:
 #define D6 5
 #define D7 4
 
-#define btn 3
-
+#define BUTTON 3
+/*
 // Joystick controller (analog analog digital)
-Joystick joystick = Joystick(horizontal_pin, vertical_pin, click_pin);
+Joystick joystick = Joystick(HORIZONTAL_PIN, VERTICAL_PIN, CLICK_PIN);
 // Matrix controller
 LedControl matrixController = LedControl(MATRIX_DIN, MATRIX_CS, MATRIX_CLK);
 // Console display
@@ -125,9 +33,9 @@ void setup() {
 	matrixController.clearDisplay(0);// clear screen
 	lcdController.begin(lcd_cols, lcd_rows);
 	// Set current running interface
-	currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, btn);
-	pinMode(vertical_pin, INPUT);
-	pinMode(horizontal_pin, INPUT);
+	currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, BUTTON);
+	pinMode(VERTICAL_PIN, INPUT);
+	pinMode(HORIZONTAL_PIN, INPUT);
 }
 
 void loop() {
@@ -136,17 +44,20 @@ void loop() {
 	{
 	case program_selector:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, btn);
+		currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, BUTTON);
 		break;
 	case snake:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, btn, 3, 3);
+		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, BUTTON, 3, 3);
 		break;
 	case star:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new Star(&matrixController, &lcdController, &joystick, btn);
+		currentRunningProgram = (Program*) new Star(&matrixController, &lcdController, &joystick, BUTTON);
 		break;
 	default:
 		break;
 	}
 }
+*/
+void setup() {}
+void loop() {}

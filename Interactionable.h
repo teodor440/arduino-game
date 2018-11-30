@@ -9,6 +9,7 @@
 
 #endif
 
+#include "Utils.h"
 #include "Joystick.h"
 
 #define DIRECTION_NONE 0
@@ -42,6 +43,3 @@ public:
 	static void handleClickInterrupt();
 	static void handleButtonInterrupt();
 };
-
-uint8_t Interactionable::clickCount = 0;
-uint8_t Interactionable::btn_pressed = 0;

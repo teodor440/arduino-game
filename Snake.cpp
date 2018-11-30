@@ -1,4 +1,12 @@
-﻿Snake::Snake(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t start_x, uint8_t start_y) : Game(matctrl, ledctrl, joystick, button) {
+#include "Snake.h"
+
+#define GAME_COUNT 2
+#define SNAKE 2
+#define STAR 3
+#define PROGRAM_SELECTOR 1
+#define CURRENT_PROGRAM 0
+
+Snake::Snake(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t start_x, uint8_t start_y) : Game(matctrl, ledctrl, joystick, button) {
 	Point start(start_x, start_y);
 	tail.add(start);
 	direction = DIRECTION_DOWN;
@@ -21,8 +29,8 @@ void Snake::onNewFrame() {}
 
 uint8_t Snake::run() {
 
-	if (this->shutdownTrigger) return program_selector;
-	return current_program;
+	if (this->shutdownTrigger) return PROGRAM_SELECTOR;
+	return CURRENT_PROGRAM;
 }
 
 void Snake::onButtonPressed() {

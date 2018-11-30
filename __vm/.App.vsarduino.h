@@ -14,7 +14,6 @@
 #define _VSARDUINO_H_
 #define __AVR_ATmega328p__
 #define __AVR_ATmega328P__
-#define _VMDEBUG 1
 #define F_CPU 16000000L
 #define ARDUINO 10807
 #define ARDUINO_AVR_UNO
@@ -77,9 +76,5 @@ typedef void *__builtin_va_list;
 #define pgm_read_ptr(address_short)   short()
 
 #include "App.ino"
-#include "E_Game.ino"
-#include "F_GameSelector.ino"
-#include "X_Snake.ino"
-#include "Y_Star.ino"
 #endif
 #endif

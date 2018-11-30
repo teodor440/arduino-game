@@ -1,5 +1,8 @@
 #include "Interactionable.h"
 
+uint8_t Interactionable::clickCount = 0;
+uint8_t Interactionable::btn_pressed = 0;
+
 Interactionable::Interactionable(Joystick* joystick, uint8_t quit_btn) {
 	joystick->setClickInterruptRoutine(this->handleClickInterrupt);
 	this->joystick = joystick;

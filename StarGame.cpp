@@ -1,4 +1,6 @@
-﻿Star::Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Game(matctrl, ledctrl, joystick, button) {
+#include "StarGame.h"
+
+Star::Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Game(matctrl, ledctrl, joystick, button) {
 
 }
 
@@ -8,8 +10,8 @@ void Star::onNewFrame() {}
 
 uint8_t Star::run() {
 
-	if (this->shutdownTrigger) return program_selector;
-	return current_program;
+	if (this->shutdownTrigger) return PROGRAM_SELECTOR;
+	return PROGRAM_SELECTOR;
 }
 
 void Star::onButtonPressed() {

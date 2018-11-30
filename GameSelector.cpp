@@ -1,4 +1,6 @@
-﻿GameSelector::GameSelector(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Program(matctrl, ledctrl, joystick, button) {
+#include "GameSelector.h"
+
+GameSelector::GameSelector(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Program(matctrl, ledctrl, joystick, button) {
 	this->clearConsole();
 	this->printMessage("Choose game");
 
@@ -14,10 +16,10 @@ void GameSelector::changeState(uint8_t state_index) {
 
 void GameSelector::advanceState() {
 	if (this->nextDirection == DIRECTION_UP) {
-		if (this->currentSelectedIndex == 0) changeState(game_count - 1);
+		if (this->currentSelectedIndex == 0) changeState(GAME_COUNT - 1);
 		else changeState(this->currentSelectedIndex - 1);
 	}
-	else if(this->nextDirection == DIRECTION_DOWN) changeState((this->currentSelectedIndex + 1) % game_count);
+	else if (this->nextDirection == DIRECTION_DOWN) changeState((this->currentSelectedIndex + 1) % GAME_COUNT);
 }
 
 uint8_t GameSelector::run() {
@@ -31,7 +33,7 @@ uint8_t GameSelector::run() {
 	this->processInput();
 	if (shutdownTrigger) return this->gamesMapCodes[this->currentSelectedIndex];
 
-	return current_program;
+	return CURRENT_PROGRAM;
 }
 
 void GameSelector::onClick() {

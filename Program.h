@@ -7,18 +7,20 @@
 	#include "WProgram.h"
 #endif
 
-
 #endif
 
-#include "Interactionable.h"
 #include "LedControl.h"
 #include <LiquidCrystal.h>
+#include "Interactionable.h"
 
-#define NULL 0
-#define null_ptr 0
+#define GAME_COUNT 2
+#define SNAKE 2
+#define STAR 3
+#define PROGRAM_SELECTOR 1
+#define CURRENT_PROGRAM 0
 
-#define lcd_cols 16
-#define lcd_rows 2
+#define LCD_COLS 16
+#define LCD_ROWS 2
 
 class Program : public Interactionable {
 protected:

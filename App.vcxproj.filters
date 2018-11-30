@@ -16,10 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.ino" />
-    <None Include="X_Snake.ino" />
-    <None Include="E_Game.ino" />
-    <None Include="F_GameSelector.ino" />
-    <None Include="Y_Star.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.App.vsarduino.h">
@@ -37,6 +33,18 @@
     <ClInclude Include="Program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameSelector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Snake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StarGame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Joystick.cpp">
@@ -49,6 +57,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameSelector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Snake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StarGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
