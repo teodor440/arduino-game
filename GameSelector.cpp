@@ -5,13 +5,23 @@ GameSelector::GameSelector(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick
 	this->printMessage("Choose game");
 
 	this->changeState(0);
+	this->delayPeriod = 500;
+
+	this->lastBlink = millis();
 }
 
 void GameSelector::changeState(uint8_t state_index) {
+	#ifdef DEBUGGING
 	Serial.print("Changed game choice state to ");
 	Serial.println(this->gameNames[state_index]);
+	#endif
 	this->printMessage(this->gameNames[state_index], 1);
 	this->currentSelectedIndex = state_index;
+	// Draw some awesome shit to display on the matrix for the game
+	this->matrixcontroller->clearDisplay(0);
+	for (int i = 0; i < COORDINATES_LENGTH - 1; i += 2) {
+		this->matrixcontroller->setLed(0, this->images[state_index][i], this->images[state_index][i + 1], true);
+	}
 }
 
 void GameSelector::advanceState() {
@@ -20,9 +30,14 @@ void GameSelector::advanceState() {
 		else changeState(this->currentSelectedIndex - 1);
 	}
 	else if (this->nextDirection == DIRECTION_DOWN) changeState((this->currentSelectedIndex + 1) % GAME_COUNT);
+	this->nextDirection = DIRECTION_NONE;
 }
 
 uint8_t GameSelector::run() {
+	// First we should check if we selected a program
+	this->processInput();
+	if (shutdownTrigger) return this->gamesMapCodes[this->currentSelectedIndex];
+	// Then process the other efects of user input5555555555555555555555
 	int currentMillis = millis();
 	if ((unsigned long)(currentMillis - this->lastMillis) > this->delayPeriod) {
 		this->lastMillis = currentMillis;
@@ -30,8 +45,12 @@ uint8_t GameSelector::run() {
 		this->advanceState();
 	}
 
-	this->processInput();
-	if (shutdownTrigger) return this->gamesMapCodes[this->currentSelectedIndex];
+	if ((unsigned long)(currentMillis - this->lastBlink) > this->blinkingInterval) {
+		this->lastBlink = millis();
+
+		this->matrixcontroller->shutdown(0, blinkingState);
+		blinkingState = !blinkingState;
+	}
 
 	return CURRENT_PROGRAM;
 }

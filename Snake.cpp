@@ -7,9 +7,14 @@
 #define CURRENT_PROGRAM 0
 
 Snake::Snake(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t start_x, uint8_t start_y) : Game(matctrl, ledctrl, joystick, button) {
+	matctrl->clearDisplay(0);
+	ledctrl->clear();
+
+	// Needed constructor params for this
 	Point start(start_x, start_y);
 	tail.add(start);
-	direction = DIRECTION_DOWN;
+
+	init();
 }
 
 LinkedList<Point> Snake::getSnake() {
@@ -23,7 +28,9 @@ LinkedList<Point> Snake::getFoodAsDrawable() {
 	LinkedList<Point> al;
 }
 
-void Snake::init() {}
+void Snake::init() {
+	direction = DIRECTION_UP;
+}
 
 void Snake::onNewFrame() {}
 

@@ -25,14 +25,18 @@ void Interactionable::handleButtonInterrupt() {
 
 void Interactionable::processInput() {
 	if (this->btn_pressed) {
+		#ifdef DEBUGGING
 		Serial.println("Button pressed");
+		#endif	
 
 		onButtonPressed();
 		btn_pressed = 0;
 	}
 	if (clickCount != 0) {
+		#ifdef DEBUGGING
 		Serial.print("Clicked - ");
 		Serial.println(clickCount);
+		#endif
 
 		if (clickCount == 1)
 			onClick();
@@ -49,20 +53,28 @@ void Interactionable::processInput() {
 	Serial.println(y);
 
 	if (x > (joystick->sensivity + 512)) {
+		#ifdef DEBUGGING
 		Serial.println("Right gesture");
+		#endif	
 		this->onRightGesture(x - 512);
 	}
 	else if (x < (512 - joystick->sensivity)) {
+		#ifdef DEBUGGING
 		Serial.println("Left gesture");
+		#endif
 		this->onLeftGesture(512 - x);
 	}
 
 	if (y > (joystick->sensivity + 512)) {
+		#ifdef DEBUGGING
 		Serial.println("Up gesture");
+		#endif
 		this->onUpGesture(y - 512);
 	}
 	else if (y < (512 - joystick->sensivity)) {
+		#ifdef DEBUGGING
 		Serial.println("Down gesture");
+		#endif
 		this->onDownGesture(512 - y);
 	}
 }
