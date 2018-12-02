@@ -1,4 +1,3 @@
-#define DEBUGGING 1
 #include "Program.h"
 #include "GameSelector.h"
 #include "Snake.h"
@@ -31,10 +30,8 @@ LiquidCrystal lcdController = LiquidCrystal(LCD_RS, LCD_EN, D4, D5, D6, D7);
 Program* currentRunningProgram;
 
 void setup() {
-	#ifdef DEBUGGING
 	// Serial opened for debugging
 	Serial.begin(9600);
-	#endif
 	// Some one time setup for devices
 	matrixController.shutdown(0, false); // turn off power saving, enables display
 	matrixController.setIntensity(0, 2); // sets brightness (0~15 possible values)
@@ -56,7 +53,7 @@ void loop() {
 		break;
 	case SNAKE:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, BUTTON, 3, 3);
+		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, BUTTON);
 		break;
 	case STAR:
 		delete currentRunningProgram;

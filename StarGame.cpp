@@ -14,9 +14,19 @@ uint8_t Star::run() {
 	return PROGRAM_SELECTOR;
 }
 
+void Star::addToSpeed(uint8_t value) {
+	// TODO
+}
+
+void Star::resetSpeed() {
+	// TODO
+}
+
 void Star::onButtonPressed() {
 	this->shutdownTrigger = true;
 }
+
+void Star::endGame(uint8_t end) {}
 
 void Star::onClick() {}
 

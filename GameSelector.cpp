@@ -11,10 +11,10 @@ GameSelector::GameSelector(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick
 }
 
 void GameSelector::changeState(uint8_t state_index) {
-	#ifdef DEBUGGING
+#ifdef DEBUGGING_MENU
 	Serial.print("Changed game choice state to ");
 	Serial.println(this->gameNames[state_index]);
-	#endif
+#endif
 	this->printMessage(this->gameNames[state_index], 1);
 	this->currentSelectedIndex = state_index;
 	// Draw some awesome shit to display on the matrix for the game
@@ -36,7 +36,10 @@ void GameSelector::advanceState() {
 uint8_t GameSelector::run() {
 	// First we should check if we selected a program
 	this->processInput();
-	if (shutdownTrigger) return this->gamesMapCodes[this->currentSelectedIndex];
+	if (shutdownTrigger) {
+		this->matrixcontroller->shutdown(0, false);
+		return this->gamesMapCodes[this->currentSelectedIndex];
+	}
 	// Then process the other efects of user input5555555555555555555555
 	int currentMillis = millis();
 	if ((unsigned long)(currentMillis - this->lastMillis) > this->delayPeriod) {

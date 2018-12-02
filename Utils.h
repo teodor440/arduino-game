@@ -17,20 +17,31 @@ public:
 template <class T>
 class LinkedList
 {
+private:
+	uint8_t length;
 public:
 	class Node
 	{
 	public:
 		Node* next;
+		Node* previous;
 		T data;
 	};
-	uint8_t length;
+
 	Node* head;
+	Node* tail;
+	
 
 	LinkedList();
 	~LinkedList();
 	void add(T);
+	void remove_tail();
 	void clear();
+
+	T getHead();
+	T getTail();
+	Node* getHeadPointer();
+	uint8_t getLength();
 };
 
 
@@ -40,11 +51,12 @@ template <class T>
 LinkedList<T>::LinkedList() {
 	this->length = 0;
 	this->head = NULL;
+	this->tail = NULL;
 }
 
 template <class T>
 LinkedList<T>::~LinkedList() {
-	Node* next = head;
+	Node* next = this->head;
 	Node* cur = NULL;
 	while (next != NULL) {
 		cur = next;
@@ -58,13 +70,20 @@ void LinkedList<T>::add(T data) {
 	Node* node = new Node();
 	node->data = data;
 	node->next = this->head;
+	node->previous = NULL;
+
 	this->head = node;
 	this->length++;
+	
+	if (this->length == 1) this->tail = this->head;
+	else if (this->length >= 2) {
+		this->head->next->previous = this->head;
+	}
 }
 
 template <class T>
 void LinkedList<T>::clear() {
-	Node* next = head;
+	Node* next = this->head;
 	Node* cur = NULL;
 	while (next != NULL) {
 		cur = next;
@@ -72,6 +91,39 @@ void LinkedList<T>::clear() {
 		delete cur;
 	}
 	this->length = 0;
+}
+
+template <class T>
+void LinkedList<T>::remove_tail() {
+	if (this->tail != NULL) {
+		Node* aux = this->tail->previous;
+		delete this->tail;
+		this->tail = aux;
+		if (this->tail != NULL) {
+			this->tail->next = NULL;
+			this->length--;
+		}
+	}
+}
+
+template <class T>
+T LinkedList<T>::getHead() {
+	return this->head->data;
+}
+
+template <class T>
+T LinkedList<T>::getTail() {
+	return this->tail->data;
+}
+
+template <typename T>
+typename LinkedList<T>::Node* LinkedList<T>::getHeadPointer() {
+	return this->head;
+}
+
+template <class T>
+uint8_t LinkedList<T>::getLength() {
+	return this->length;
 }
 
 #endif

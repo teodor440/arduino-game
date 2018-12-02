@@ -8,7 +8,7 @@ Program::Program(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick
 }
 
 void Program::printMessage(String message, uint8_t row = 0) {
-	#ifdef DEBUGGING
+	#ifdef DEBUGGING_SNAKE
 	Serial.print("Printed on lcd " + message + " on row " + row);
 	#endif
 	this->lcdcontroller->setCursor(0, row);
@@ -22,7 +22,7 @@ void Program::printMessage(String message, uint8_t row = 0) {
 }
 
 void Program::clearConsole() {
-	#ifdef DEBUGGING
+	#ifdef DEBUGGING_SNAKE
 	Serial.println("Console cleared");
 	#endif
 	this->lcdcontroller->clear();

@@ -9,6 +9,8 @@
 
 #include "Program.h"
 
+// #define DEBUGGING_MENU 1
+
 // Just as a reminder coord len shouldnt be less than 2
 #define COORDINATES_LENGTH 12
 #define NAN 64

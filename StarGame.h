@@ -10,11 +10,15 @@
 #include "Game.h"
 
 class Star : public Game {
-public:
-	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button);
-
+protected:
 	virtual void init();
 	virtual void onNewFrame();
+	virtual void endGame(uint8_t);
+
+	virtual void addToSpeed(uint8_t);
+	virtual void resetSpeed();
+public:
+	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button);
 
 	virtual void onClick();
 	virtual void onDoubleClick();
