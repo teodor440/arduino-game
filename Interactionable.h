@@ -10,6 +10,8 @@
 #include "Utils.h"
 #include "Joystick.h"
 
+// #define DEBUGGING_MENU 1
+
 #define DIRECTION_NONE 0
 #define DIRECTION_UP 1
 #define DIRECTION_DOWN 2
@@ -28,10 +30,10 @@ public:
 	Interactionable(Joystick*, uint8_t button);
 	virtual void onClick() = 0;
 	virtual void onDoubleClick() = 0;
-	virtual void onLeftGesture(uint8_t) = 0;
-	virtual void onRightGesture(uint8_t) = 0;
-	virtual void onUpGesture(uint8_t) = 0;
-	virtual void onDownGesture(uint8_t) = 0;
+	virtual void onLeftGesture(unsigned int) = 0;
+	virtual void onRightGesture(unsigned int) = 0;
+	virtual void onUpGesture(unsigned int) = 0;
+	virtual void onDownGesture(unsigned int) = 0;
 	virtual void onButtonPressed() = 0;
 
 	// CALL THIS LITTLE FAT BOY WHEN RUNNING ANY FUCKING PROGRAM 

@@ -1,19 +1,19 @@
 #include "Snake.h"
 
 Snake::Snake(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Game(matctrl, ledctrl, joystick, button) {
-	this->delayPeriod = SNAKE_BASIS_DELAY;
 	init();
 }
 
 void Snake::init() {
-#ifdef DEBUGGING_SNAKE
-	Serial.println("Snake game initialized captain");
-#endif
 	this->freeSpaces = 64;
+	this->score = 1;
 	this->lastDirection = DIRECTION_NONE;
+	this->direction = DIRECTION_UP;
+	this->game_status = PAUSED;
+	this->resetSpeed();
 
 	this->matrixcontroller->clearDisplay(0);
-	this->score = 0;
+	this->clearConsole();
 	this->printMessage("Good Luck!");
 
 	for (int i = 0; i < 8; i++)
@@ -26,15 +26,20 @@ void Snake::init() {
 	matrixMap[3][3] = 1;
 	this->matrixcontroller->setLed(0, 3, 3, true);
 
-	direction = DIRECTION_UP;
-
 	this->food = this->generateRandomFood();
 	this->matrixcontroller->setLed(0, this->food.y, this->food.x, true);
+	this->matrixMap[this->food.y][this->food.x] = 1;
 
 	this->resetSpeed();
+
+#ifdef DEBUGGING_SNAKE
+	Serial.println("Snake game initialized captain");
+#endif
 }
 
 void Snake::onNewFrame() {
+	this->resetSpeed();
+
 	uint8_t newX = this->tail.getHead().x;
 	uint8_t newY = this->tail.getHead().y;
 
@@ -50,16 +55,17 @@ void Snake::onNewFrame() {
 		endGame(GAME_LOST);
 		return;
 	}
-	for (LinkedList<Point>::Node* it = tail.getHeadPointer(); it != NULL; it = it->next) {
-		if ((it->data.x == newX) && (it->data.y == newY)) {
-			endGame(GAME_LOST);
-			return;
-		}
+	
+	// Rendundant compoarations but kept them here for code readability
+	if ((this->matrixMap[newY][newX] == 1) && (newX != this->food.x) && (newY != this->food.y)) {
+		endGame(GAME_LOST);
+		return;
 	}
 
 	// If the snake eats, yummy
 	if ((newX == this->food.x) && (newY == this->food.y)) {
 		this->tail.add(Point(newX, newY));
+		
 		// Do you really think you can win this game commarade? I think not
 		this->freeSpaces--;
 		if (freeSpaces == 0) {
@@ -68,15 +74,18 @@ void Snake::onNewFrame() {
 		}
 		this->food = generateRandomFood();
 		this->matrixcontroller->setLed(0, this->food.y, this->food.x, true);
+		this->matrixMap[this->food.y][this->food.x] = 1;
 
 		this->score++;
 		this->printMessage(String(this->score), 1);
 	}
 	else {
 		this->tail.add(Point(newX, newY));
+		this->matrixMap[newY][newX] = 1;
 		this->matrixcontroller->setLed(0, newY, newX, true);
 
 		Point deletePoint = this->tail.getTail();
+		this->matrixMap[deletePoint.y][deletePoint.x] = 0;
 		this->tail.remove_tail();
 		this->matrixcontroller->setLed(0, deletePoint.y, deletePoint.x, false);
 	}
@@ -84,6 +93,8 @@ void Snake::onNewFrame() {
 
 uint8_t Snake::run() {
 	// First we should check if we want to quit
+	// First increment number of readings not to divide by 0 in case of a gesture
+	// this->numberOfReadings++;
 	this->processInput();
 	if (this->shutdownTrigger) return PROGRAM_SELECTOR;
 	if (this->game_status == RUNNING) {
@@ -92,9 +103,7 @@ uint8_t Snake::run() {
 		if ((unsigned long)(currentMillis - this->lastMillis) > this->delayPeriod) {
 			this->lastMillis = currentMillis;
 			// Relevant periodical code
-			if (this->game_status == RUNNING) this->onNewFrame();
-			// Now reset the game peace
-			this->resetSpeed();
+			this->onNewFrame();
 		}
 	}
 
@@ -105,17 +114,29 @@ void Snake::endGame(uint8_t end) {
 	if (end == GAME_WON) {
 		this->printMessage("Congratulations!");
 		this->printMessage("You did it!", 1);
-		// TODO RETAIN SCORE
+		// Write HS
+		EEPROM.write(this->highScoreAddress, 64);
 	}
 	if (end == GAME_LOST) {
-		// TODO
-		this->printMessage("Game over");
-		this->game_status = PAUSED;
+		// EEPROM.write(this->highScoreAddress, 0);
+		uint8_t hs = EEPROM.read(this->highScoreAddress);
+		if (this->score > hs) {
+			this->printMessage("Not bad!");
+			this->printMessage("Hit highscore " + String(this->score), 1);
+			EEPROM.write(this->highScoreAddress, this->score);
+		}
+		else {
+			this->printMessage("Game over!");
+			this->printMessage("Your score " + String(this->score), 1);
+		}
 	}
 
 	this->tail.clear();
-	// Beware of this line bruh
-	init();
+	this->game_status = WAITING_RESTART;
+
+#ifdef DEBUGGING_SNAKE
+	Serial.println("Game ended and waiting to be restarted");
+#endif
 }
 
 Point Snake::generateRandomFood() {
@@ -144,6 +165,7 @@ Point Snake::generateRandomFood() {
 	return Point(x, y);
 }
 
+
 void Snake::onButtonPressed() {
 #ifdef DEBUGGING_SNAKE
 	Serial.println("Button pressed");
@@ -154,17 +176,7 @@ void Snake::onButtonPressed() {
 		this->clearConsole();
 		this->printMessage("Paused");
 	}
-	else if (this->game_status == PAUSED) this->shutdownTrigger = true;
-}
-
-
-
-void Snake::addToSpeed(uint8_t value) {
-	// TODO
-}
-
-void Snake::resetSpeed() {
-	this->delayPeriod = SNAKE_BASIS_DELAY;
+	else if (this->game_status == PAUSED || this->game_status == WAITING_RESTART) this->shutdownTrigger = true;
 }
 
 void Snake::onClick() {
@@ -174,38 +186,40 @@ void Snake::onClick() {
 	if (this->game_status == PAUSED) {
 		this->printMessage("Score");
 		this->printMessage(String(score), 1);
+		this->game_status = RUNNING;
 	}
-	this->game_status = RUNNING;
+	// init will put the game on pause also
+	if (this->game_status == WAITING_RESTART) this->init();
 }
 
 void Snake::onDoubleClick() {
 	this->onClick();
 }
 
-void Snake::onLeftGesture(uint8_t power) {
-	if ((lastDirection != DIRECTION_RIGHT) || (this->tail.getLength() == 1)) {
-		direction = DIRECTION_LEFT;
-		addToSpeed(power);
+void Snake::onLeftGesture(unsigned int power) {
+	if ((lastDirection != DIRECTION_RIGHT) || (this->tail.getLength() < 2)) {
+		this->influenceSpeed(power);
+		this->direction = DIRECTION_LEFT;
 	}
 }
 
-void Snake::onRightGesture(uint8_t power) {
-	if ((lastDirection != DIRECTION_LEFT) || (this->tail.getLength() == 1)) {
-		direction = DIRECTION_RIGHT;
-		addToSpeed(power);
+void Snake::onRightGesture(unsigned int power) {
+	if ((lastDirection != DIRECTION_LEFT) || (this->tail.getLength() < 2)) {
+		this->influenceSpeed(power);
+		this->direction = DIRECTION_RIGHT;
 	}
 }
 
-void Snake::onUpGesture(uint8_t power) {
-	if ((lastDirection != DIRECTION_DOWN) || (this->tail.getLength() == 1)) {
-		direction = DIRECTION_UP;
-		addToSpeed(power);
+void Snake::onUpGesture(unsigned int power) {
+	if ((lastDirection != DIRECTION_DOWN) || (this->tail.getLength() < 2)) {
+		this->influenceSpeed(power);
+		this->direction = DIRECTION_UP;
 	}
 }
 
-void Snake::onDownGesture(uint8_t power) {
-	if ((lastDirection != DIRECTION_RIGHT) || (this->tail.getLength() == 1)) {
-		direction = DIRECTION_DOWN;
-		addToSpeed(power);
+void Snake::onDownGesture(unsigned int power) {
+	if ((lastDirection != DIRECTION_UP) || (this->tail.getLength() < 2)) {
+		this->influenceSpeed(power);
+		this->direction = DIRECTION_DOWN;
 	}
 }

@@ -22,10 +22,10 @@ public:
 
 	virtual void onClick();
 	virtual void onDoubleClick();
-	virtual void onLeftGesture(uint8_t);
-	virtual void onRightGesture(uint8_t);
-	virtual void onUpGesture(uint8_t);
-	virtual void onDownGesture(uint8_t);
+	virtual void onLeftGesture(unsigned int);
+	virtual void onRightGesture(unsigned int);
+	virtual void onUpGesture(unsigned int);
+	virtual void onDownGesture(unsigned int);
 	virtual void onButtonPressed();
 
 	virtual uint8_t run();

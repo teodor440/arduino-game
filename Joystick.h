@@ -11,7 +11,7 @@ class Joystick {
 private:
 	uint8_t Hpin, Vpin, Cpin;
 public:
-	const uint8_t sensivity = 128;
+	const unsigned int sensivity = 156;
 	Joystick(uint8_t Hpin, uint8_t Vpin, uint8_t Cpin);
 	// Values between 0-1023
 	int getX();

@@ -62,11 +62,11 @@ void GameSelector::onClick() {
 	this->shutdownTrigger = true;
 }
 
-void GameSelector::onUpGesture(uint8_t power) {
+void GameSelector::onUpGesture(unsigned int power) {
 	nextDirection = DIRECTION_UP;
 }
 
-void GameSelector::onDownGesture(uint8_t power) {
+void GameSelector::onDownGesture(unsigned int power) {
 	nextDirection = DIRECTION_DOWN;
 }
 
@@ -74,6 +74,6 @@ void GameSelector::onDoubleClick() {}
 
 void GameSelector::onButtonPressed() {}
 
-void GameSelector::onLeftGesture(uint8_t power) {}
+void GameSelector::onLeftGesture(unsigned int power) {}
 
-void GameSelector::onRightGesture(uint8_t power) {}
+void GameSelector::onRightGesture(unsigned int power) {}

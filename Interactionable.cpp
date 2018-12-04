@@ -13,6 +13,7 @@ Interactionable::Interactionable(Joystick* joystick, uint8_t quit_btn) {
 	this->quit_btn = quit_btn;
 	pinMode(quit_btn, INPUT);
 	btn_pressed = 0;
+	attachInterrupt(digitalPinToInterrupt(quit_btn), this->handleButtonInterrupt, RISING);
 }
 
 void Interactionable::handleClickInterrupt() {
@@ -58,25 +59,25 @@ void Interactionable::processInput() {
 		#ifdef DEBUGGING_MENU
 		Serial.println("Right gesture");
 		#endif	
-		this->onRightGesture(x - 512);
+		this->onRightGesture(x - 512 - joystick->sensivity);
 	}
 	else if (x < (512 - joystick->sensivity)) {
 		#ifdef DEBUGGING_MENU
 		Serial.println("Left gesture");
 		#endif
-		this->onLeftGesture(512 - x);
+		this->onLeftGesture(512 - joystick->sensivity - x);
 	}
 
 	if (y > (joystick->sensivity + 512)) {
 		#ifdef DEBUGGING_MENU
 		Serial.println("Up gesture");
 		#endif
-		this->onUpGesture(y - 512);
+		this->onUpGesture(y - 512 - joystick->sensivity);
 	}
 	else if (y < (512 - joystick->sensivity)) {
 		#ifdef DEBUGGING_MENU
 		Serial.println("Down gesture");
 		#endif
-		this->onDownGesture(512 - y);
+		this->onDownGesture(512 - joystick->sensivity - y);
 	}
 }

@@ -15,8 +15,6 @@
 #define PROGRAM_SELECTOR 1
 #define CURRENT_PROGRAM 0
 
-#define SNAKE_BASIS_DELAY 1000
-
 // #define DEBUGGING_SNAKE 1
 
 class Snake : public Game {
@@ -35,9 +33,6 @@ private:
 	virtual void onNewFrame();
 	virtual void endGame(uint8_t);
 
-	virtual void addToSpeed(uint8_t);
-	virtual void resetSpeed();
-
 	Point generateRandomFood();
 public:
 	uint8_t direction;
@@ -45,10 +40,10 @@ public:
 
 	virtual void onClick();
 	virtual void onDoubleClick();
-	virtual void onLeftGesture(uint8_t);
-	virtual void onRightGesture(uint8_t);
-	virtual void onUpGesture(uint8_t);
-	virtual void onDownGesture(uint8_t);
+	virtual void onLeftGesture(unsigned int);
+	virtual void onRightGesture(unsigned int);
+	virtual void onUpGesture(unsigned int);
+	virtual void onDownGesture(unsigned int);
 	virtual void onButtonPressed();
 
 	virtual uint8_t run();

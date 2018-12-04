@@ -91,6 +91,8 @@ void LinkedList<T>::clear() {
 		delete cur;
 	}
 	this->length = 0;
+	this->head = NULL;
+	this->tail = NULL;
 }
 
 template <class T>

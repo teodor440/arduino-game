@@ -32,10 +32,10 @@ void Star::onClick() {}
 
 void Star::onDoubleClick() {}
 
-void Star::onLeftGesture(uint8_t power) {}
+void Star::onLeftGesture(unsigned int power) {}
 
-void Star::onRightGesture(uint8_t power) {}
+void Star::onRightGesture(unsigned int power) {}
 
-void Star::onUpGesture(uint8_t power) {}
+void Star::onUpGesture(unsigned int power) {}
 
-void Star::onDownGesture(uint8_t power) {}
+void Star::onDownGesture(unsigned int power) {}
