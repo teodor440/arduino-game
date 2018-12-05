@@ -10,13 +10,31 @@
 #include "Game.h"
 
 class Star : public Game {
+private:
+	struct Ball {
+		Point location;
+		uint8_t direction;
+		Ball(Point location, uint8_t direction);
+	};
+
+	Point spaceship;
+	uint8_t direction;
+	LinkedList<Ball> ballz;
+	bool shouldFire;
+	uint8_t lifes;
+
+	// Pretty much the animation of moving dots
+	void moveBalls();
+	// Fire from player spaceship
+	void launchProjectile(uint8_t);
+	// Check if balls collide
+	void processBallsInteraction();
+	// Create random new balls coming to attack player
+	void generateProjectile();
 protected:
 	virtual void init();
 	virtual void onNewFrame();
 	virtual void endGame(uint8_t);
-
-	virtual void addToSpeed(uint8_t);
-	virtual void resetSpeed();
 public:
 	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button);
 
@@ -26,9 +44,6 @@ public:
 	virtual void onRightGesture(unsigned int);
 	virtual void onUpGesture(unsigned int);
 	virtual void onDownGesture(unsigned int);
-	virtual void onButtonPressed();
-
-	virtual uint8_t run();
 };
 
 #endif

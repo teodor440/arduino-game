@@ -44,9 +44,6 @@ public:
 	virtual void onRightGesture(unsigned int);
 	virtual void onUpGesture(unsigned int);
 	virtual void onDownGesture(unsigned int);
-	virtual void onButtonPressed();
-
-	virtual uint8_t run();
 };
 
 

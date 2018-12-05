@@ -8,7 +8,7 @@ void Snake::init() {
 	this->freeSpaces = 64;
 	this->score = 1;
 	this->lastDirection = DIRECTION_NONE;
-	this->direction = DIRECTION_UP;
+	this->direction = DIRECTION_NONE;
 	this->game_status = PAUSED;
 	this->resetSpeed();
 
@@ -38,6 +38,8 @@ void Snake::init() {
 }
 
 void Snake::onNewFrame() {
+	if (this->direction == DIRECTION_NONE) return;
+
 	this->resetSpeed();
 
 	uint8_t newX = this->tail.getHead().x;
@@ -89,25 +91,6 @@ void Snake::onNewFrame() {
 		this->tail.remove_tail();
 		this->matrixcontroller->setLed(0, deletePoint.y, deletePoint.x, false);
 	}
-}
-
-uint8_t Snake::run() {
-	// First we should check if we want to quit
-	// First increment number of readings not to divide by 0 in case of a gesture
-	// this->numberOfReadings++;
-	this->processInput();
-	if (this->shutdownTrigger) return PROGRAM_SELECTOR;
-	if (this->game_status == RUNNING) {
-		// Then continue the game
-		int currentMillis = millis();
-		if ((unsigned long)(currentMillis - this->lastMillis) > this->delayPeriod) {
-			this->lastMillis = currentMillis;
-			// Relevant periodical code
-			this->onNewFrame();
-		}
-	}
-
-	return CURRENT_PROGRAM;
 }
 
 void Snake::endGame(uint8_t end) {
@@ -165,31 +148,17 @@ Point Snake::generateRandomFood() {
 	return Point(x, y);
 }
 
-
-void Snake::onButtonPressed() {
-#ifdef DEBUGGING_SNAKE
-	Serial.println("Button pressed");
-#endif
-	if (this->game_status == RUNNING) {
-		this->game_status = PAUSED;
-
-		this->clearConsole();
-		this->printMessage("Paused");
-	}
-	else if (this->game_status == PAUSED || this->game_status == WAITING_RESTART) this->shutdownTrigger = true;
-}
-
 void Snake::onClick() {
 #ifdef DEBUGGING_SNAKE
 	Serial.println("Clicked");
 #endif
-	if (this->game_status == PAUSED) {
+	if (this->gameStatus == PAUSED) {
 		this->printMessage("Score");
 		this->printMessage(String(score), 1);
-		this->game_status = RUNNING;
+		this->gameStatus = RUNNING;
 	}
 	// init will put the game on pause also
-	if (this->game_status == WAITING_RESTART) this->init();
+	if (this->gameStatus == WAITING_RESTART) this->init();
 }
 
 void Snake::onDoubleClick() {

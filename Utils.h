@@ -37,6 +37,8 @@ public:
 	void add(T);
 	void remove_tail();
 	void clear();
+	// Can handle redeletion of nodes
+	void remove(Node*);
 
 	T getHead();
 	T getTail();
@@ -105,6 +107,20 @@ void LinkedList<T>::remove_tail() {
 			this->tail->next = NULL;
 			this->length--;
 		}
+	}
+}
+
+template <class T>
+void LinkedList<T>::remove(LinkedList<T>::Node* node) {
+	if (this->length == 0) return;
+	bool exists = false;
+	for (LinkedList<T>::Node* it; (it != NULL) && (!exists); it = it->next) {
+		if (it == node) exists = true;
+	}
+	if (exists) {
+		node->next->next = node->next;
+		node->previous->previous = node->previous;
+		this->length--;
 	}
 }
 

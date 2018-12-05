@@ -22,3 +22,32 @@ void Game::resetSpeed() {
 void Game::changeBasisPace(float percentage) {
 	this->basisGameDelay *= percentage;
 }
+
+uint8_t Game::run() {
+	// First we should check if we want to quit
+	// First increment number of readings not to divide by 0 in case of a gesture
+	// this->numberOfReadings++;
+	this->processInput();
+	if (this->shutdownTrigger) return PROGRAM_SELECTOR;
+	if (this->gameStatus == RUNNING) {
+		// Then continue the game
+		int currentMillis = millis();
+		if ((unsigned long)(currentMillis - this->lastMillis) > this->delayPeriod) {
+			this->lastMillis = currentMillis;
+			// Relevant periodical code
+			this->onNewFrame();
+		}
+	}
+
+	return CURRENT_PROGRAM;
+}
+
+void Game::onButtonPressed() {
+	if (this->gameStatus == RUNNING) {
+		this->gameStatus = PAUSED;
+
+		this->clearConsole();
+		this->printMessage("Paused");
+	}
+	else if (this->gameStatus == PAUSED || this->gameStatus == WAITING_RESTART) this->shutdownTrigger = true;
+}

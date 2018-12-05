@@ -17,6 +17,10 @@
 #define GAME_WON 1
 #define GAME_LOST 0
 
+#define DIFFICULTY_EASY 1
+#define DIFFICULTY_MEDIUM 2
+#define DIFFICULTY_HARD 3
+
 class Game : public Program {
 private:
 	// Just tolerate this surplus global variable, just for the sake of a private joystick
@@ -25,7 +29,7 @@ private:
 	unsigned long basisGameDelay = 1000;
 protected:
 	uint8_t frameCount = 0;
-	uint8_t game_status;
+	uint8_t gameStatus;
 	
 	uint8_t score = 0;
 
@@ -38,6 +42,10 @@ protected:
 	virtual void resetSpeed();
 	// Change the basis game speed by a multiplier 
 	virtual void changeBasisPace(float);
+
+	virtual uint8_t run();
+
+	virtual void onButtonPressed();
 public:
 	Game(LedControl*, LiquidCrystal*, Joystick*, uint8_t button);
 };
