@@ -9,7 +9,7 @@ void Snake::init() {
 	this->score = 1;
 	this->lastDirection = DIRECTION_NONE;
 	this->direction = DIRECTION_NONE;
-	this->game_status = PAUSED;
+	this->gameStatus = PAUSED;
 	this->resetSpeed();
 
 	this->matrixcontroller->clearDisplay(0);
@@ -115,7 +115,7 @@ void Snake::endGame(uint8_t end) {
 	}
 
 	this->tail.clear();
-	this->game_status = WAITING_RESTART;
+	this->gameStatus = WAITING_RESTART;
 
 #ifdef DEBUGGING_SNAKE
 	Serial.println("Game ended and waiting to be restarted");

@@ -15,6 +15,7 @@ private:
 		Point location;
 		uint8_t direction;
 		Ball(Point location, uint8_t direction);
+		Ball();
 	};
 
 	Point spaceship;

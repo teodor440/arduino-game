@@ -152,3 +152,5 @@ Star::Ball::Ball(Point location, uint8_t direction) {
 	this->location = location;
 	this->direction = direction;
 }
+
+Star::Ball::Ball() {}
