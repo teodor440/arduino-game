@@ -138,6 +138,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Audio.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameSelector.h" />
     <ClInclude Include="Interactionable.h" />
@@ -149,6 +150,7 @@
     <ClInclude Include="__vm\.App.vsarduino.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Audio.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameSelector.cpp" />
     <ClCompile Include="Interactionable.cpp" />

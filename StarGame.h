@@ -18,11 +18,15 @@ private:
 		Ball();
 	};
 
+	int highScoreAddress = 0x1;
+
 	Point spaceship;
 	uint8_t direction;
 	LinkedList<Ball> ballz;
 	bool shouldFire;
 	uint8_t lifes;
+
+	uint8_t difficulty;
 
 	// Pretty much the animation of moving dots
 	void moveBalls();
@@ -30,14 +34,14 @@ private:
 	void launchProjectile(uint8_t);
 	// Check if balls collide
 	void processBallsInteraction();
-	// Create random new balls coming to attack player
+	// Rains some light upon the player's soul
 	void generateProjectile();
 protected:
 	virtual void init();
 	virtual void onNewFrame();
 	virtual void endGame(uint8_t);
 public:
-	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button);
+	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button, uint8_t buzzerPin);
 
 	virtual void onClick();
 	virtual void onDoubleClick();

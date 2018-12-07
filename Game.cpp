@@ -1,8 +1,10 @@
 #include "Game.h"
 
-Game::Game(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Program(matctrl, ledctrl, joystick, button), joystickSensivity(joystick->sensivity) {
+Game::Game(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t buzzerPin) : Program(matctrl, ledctrl, joystick, button), joystickSensivity(joystick->sensivity) {
 	matctrl->clearDisplay(0);
 	ledctrl->clear();
+	this->speakers = Audio(buzzerPin);
+	delay(100);
 }
 
 // Some values that work pretty well used here

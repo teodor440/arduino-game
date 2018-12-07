@@ -1,6 +1,6 @@
 #include "Snake.h"
 
-Snake::Snake(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Game(matctrl, ledctrl, joystick, button) {
+Snake::Snake(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t buzzerPin) : Game(matctrl, ledctrl, joystick, button, buzzerPin) {
 	init();
 }
 
@@ -97,7 +97,6 @@ void Snake::endGame(uint8_t end) {
 	if (end == GAME_WON) {
 		this->printMessage("Congratulations!");
 		this->printMessage("You did it!", 1);
-		// Write HS
 		EEPROM.write(this->highScoreAddress, 64);
 	}
 	if (end == GAME_LOST) {

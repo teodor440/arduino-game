@@ -8,6 +8,7 @@
 #endif
 
 #include "Program.h"
+#include "Audio.h"
 #include <EEPROM.h>
 
 #define RUNNING 0
@@ -28,6 +29,9 @@ private:
 	unsigned long speedAdjuster;
 	unsigned long basisGameDelay = 1000;
 protected:
+	// Has methods to play sounds
+	Audio speakers;
+
 	uint8_t frameCount = 0;
 	uint8_t gameStatus;
 	
@@ -38,16 +42,16 @@ protected:
 	virtual void endGame(uint8_t) = 0;
 
 	// Value should be the (power) from gesture interface
-	virtual void influenceSpeed(unsigned int value);
-	virtual void resetSpeed();
+	void influenceSpeed(unsigned int value);
+	void resetSpeed();
 	// Change the basis game speed by a multiplier 
-	virtual void changeBasisPace(float);
+	void changeBasisPace(float);
 
 	virtual uint8_t run();
 
 	virtual void onButtonPressed();
 public:
-	Game(LedControl*, LiquidCrystal*, Joystick*, uint8_t button);
+	Game(LedControl*, LiquidCrystal*, Joystick*, uint8_t button, uint8_t buzzerPin);
 };
 
 #endif

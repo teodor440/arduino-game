@@ -19,5 +19,15 @@ int Joystick::getY() {
 }
 
 void Joystick::setClickInterruptRoutine(void(*ptr)()) {
+	this->detachClickInterrupt();
 	attachInterrupt(digitalPinToInterrupt(this->Cpin), ptr, RISING);
+}
+
+void Joystick::detachClickInterrupt() {
+	if(setInterrupt) detachInterrupt(digitalPinToInterrupt(this->Cpin));
+	setInterrupt = false;
+}
+
+Joystick::~Joystick() {
+	if (setInterrupt) detachInterrupt(digitalPinToInterrupt(this->Cpin));
 }

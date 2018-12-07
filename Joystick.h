@@ -10,6 +10,7 @@
 class Joystick {
 private:
 	uint8_t Hpin, Vpin, Cpin;
+	bool setInterrupt = false;
 public:
 	const unsigned int sensivity = 156;
 	Joystick(uint8_t Hpin, uint8_t Vpin, uint8_t Cpin);
@@ -18,6 +19,9 @@ public:
 	// Values between 0-1023
 	int getY();
 	void setClickInterruptRoutine(void(*routine)());
+	void detachClickInterrupt();
+
+	~Joystick();
 };
 
 #endif

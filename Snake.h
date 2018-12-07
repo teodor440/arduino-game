@@ -36,7 +36,7 @@ private:
 	Point generateRandomFood();
 public:
 	uint8_t direction;
-	Snake(LedControl*, LiquidCrystal*, Joystick*, uint8_t button);
+	Snake(LedControl*, LiquidCrystal*, Joystick*, uint8_t button, uint8_t buzzerPin);
 
 	virtual void onClick();
 	virtual void onDoubleClick();

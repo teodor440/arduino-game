@@ -42,6 +42,9 @@ public:
 	// public interrupts methods
 	static void handleClickInterrupt();
 	static void handleButtonInterrupt();
+
+	void detachJoystickClickInterrupt();
+	~Interactionable();
 };
 
 #endif

@@ -30,5 +30,5 @@ void Program::clearConsole() {
 }
 
 Program::~Program() {
-
+	this->detachJoystickClickInterrupt();
 }

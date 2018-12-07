@@ -22,6 +22,7 @@ void GameSelector::changeState(uint8_t state_index) {
 	for (int i = 0; i < COORDINATES_LENGTH - 1; i += 2) {
 		this->matrixcontroller->setLed(0, this->images[state_index][i], this->images[state_index][i + 1], true);
 	}
+	delay(1000);
 }
 
 void GameSelector::advanceState() {

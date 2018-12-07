@@ -19,6 +19,7 @@
 #define D7 4
 
 #define BUTTON 3
+#define BUZZER_PIN A5
 
 // Joystick controller (analog analog digital)
 Joystick joystick = Joystick(HORIZONTAL_PIN, VERTICAL_PIN, CLICK_PIN);
@@ -53,11 +54,11 @@ void loop() {
 		break;
 	case SNAKE:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, BUTTON);
+		currentRunningProgram = (Program*) new Snake(&matrixController, &lcdController, &joystick, BUTTON, BUZZER_PIN);
 		break;
 	case STAR:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new Star(&matrixController, &lcdController, &joystick, BUTTON);
+		currentRunningProgram = (Program*) new Star(&matrixController, &lcdController, &joystick, BUTTON, BUZZER_PIN);
 		break;
 	default:
 		break;

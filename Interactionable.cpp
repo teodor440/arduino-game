@@ -81,3 +81,11 @@ void Interactionable::processInput() {
 		this->onDownGesture(512 - joystick->sensivity - y);
 	}
 }
+
+void Interactionable::detachJoystickClickInterrupt() {
+	joystick->detachClickInterrupt();
+}
+
+Interactionable::~Interactionable() {
+	detachInterrupt(digitalPinToInterrupt(this->quit_btn));
+}

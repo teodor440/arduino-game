@@ -113,13 +113,18 @@ void LinkedList<T>::remove_tail() {
 template <class T>
 void LinkedList<T>::remove(LinkedList<T>::Node* node) {
 	if (this->length == 0) return;
+	if (this->length == 1) {
+		this->head = this->tail = NULL;
+		return;
+	}
 	bool exists = false;
 	for (LinkedList<T>::Node* it; (it != NULL) && (!exists); it = it->next) {
 		if (it == node) exists = true;
 	}
 	if (exists) {
-		node->next->next = node->next;
-		node->previous->previous = node->previous;
+		node->next->previous = node->previous;
+		node->previous->next = node->next;
+		delete node;
 		this->length--;
 	}
 }
