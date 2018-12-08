@@ -38,7 +38,7 @@ public:
 	void remove_tail();
 	void clear();
 	// Can handle redeletion of nodes
-	void remove(Node*);
+	void remove(T);
 
 	T getHead();
 	T getTail();
@@ -110,24 +110,39 @@ void LinkedList<T>::remove_tail() {
 	}
 }
 
+
 template <class T>
-void LinkedList<T>::remove(LinkedList<T>::Node* node) {
-	if (this->length == 0) return;
-	if (this->length == 1) {
-		this->head = this->tail = NULL;
+void LinkedList<T>::remove(T value) {
+	LinkedList<T>::Node *tmp, *it;
+	if (this->head->data == value) {
+		tmp = this->head;
+		this->head = this->head->next;
+		this->head->previous = NULL;
+		delete tmp;
 		return;
 	}
-	bool exists = false;
-	for (LinkedList<T>::Node* it; (it != NULL) && (!exists); it = it->next) {
-		if (it == node) exists = true;
+
+	it = this->head;
+	while (it->next->next != NULL) {
+		if (it->next->data == value) {
+			tmp = it->next;
+			it->next = tmp->next;
+			tmp->next->previous = it;
+			delete tmp;
+			return;
+
+		}
+		it = it->next;
 	}
-	if (exists) {
-		node->next->previous = node->previous;
-		node->previous->next = node->next;
-		delete node;
-		this->length--;
+
+	if (it->next->data == value) {
+		tmp = it->next;
+		delete tmp;
+		it->next = NULL;
+		return;
 	}
 }
+
 
 template <class T>
 T LinkedList<T>::getHead() {

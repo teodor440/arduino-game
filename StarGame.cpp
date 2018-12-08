@@ -1,13 +1,12 @@
 ﻿#include "StarGame.h"
 
-Star::Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t buzzerPin) : Game(matctrl, ledctrl, joystick, button, buzzerPin) {
-	this->lifes = 0;
-	this->difficulty = DIFFICULTY_MEDIUM;
+Star::Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t buzzerPin) : lifes(0), difficulty(DIFFICULTY_MEDIUM), Game(matctrl, ledctrl, joystick, button, buzzerPin) {
 	init();
 }
 
 void Star::init() {
 	this->resetSpeed();
+	this->acceptInputInterval = this->delayPeriod / 5;
 	this->matrixcontroller->clearDisplay(0);
 	this->ballz.clear();
 	this->gameStatus = PAUSED;
@@ -21,19 +20,25 @@ void Star::init() {
 	this->matrixcontroller->setLed(0, this->spaceship.y, this->spaceship.x + 1, true);
 	this->matrixcontroller->setLed(0, this->spaceship.y, this->spaceship.x - 1, true);
 
-	if(this->lifes == 0) this->lifes = 3;
+	if (this->lifes == 0) {
+		this->lifes = 3;
+		this->score = 0;
+	}
 
-	String lifes = "";
-	for (int i = 0; i < this->lifes; i++) lifes += char(223);
-	this->printMessage("Score " + String(score));
-	this->printMessage("Lifes " + lifes, 1);
+	this->printMessage("Lifes ", 1);
+	// Created special character in ino file
+	for (int i = 0; i < this->lifes; i++) lcdcontroller->write(byte(0));
+	this->printMessage("Good luck");
+
+	this->speakers.play(Audio::gameStart);
 }
 
 void Star::onNewFrame() {
-	if (this->difficulty == DIFFICULTY_EASY) this->changeBasisPace(0.999);
-	if (this->difficulty == DIFFICULTY_MEDIUM) this->changeBasisPace(0.998);
-	if (this->difficulty == DIFFICULTY_HARD) this->changeBasisPace(0.997);
+	if (this->difficulty == DIFFICULTY_EASY) this->changeBasisPace(0.998);
+	if (this->difficulty == DIFFICULTY_MEDIUM) this->changeBasisPace(0.997);
+	if (this->difficulty == DIFFICULTY_HARD) this->changeBasisPace(0.996);
 	this->resetSpeed();
+	this->acceptInputInterval = this->delayPeriod / 4;
 
 	uint8_t newX = this->spaceship.x;
 
@@ -73,6 +78,8 @@ void Star::launchProjectile(uint8_t x) {
 }
 
 void Star::processBallsInteraction() {
+	LinkedList<Star::Ball> newL;
+
 	LinkedList<LinkedList<Star::Ball>::Node*> toDeleteNodes;
 	// Check if balls hit the wallz
 	for (LinkedList<Star::Ball>::Node* it = this->ballz.head; it != NULL; it = it->next) {
@@ -84,25 +91,28 @@ void Star::processBallsInteraction() {
 	}
 
 	for (LinkedList<LinkedList<Star::Ball>::Node*>::Node* it = toDeleteNodes.head; it != NULL; it = it->next) {
-		this->ballz.remove(it->data);
+		this->ballz.remove(it->data->data);
 	}
+	toDeleteNodes.clear();
 
-	// Check if ballz collide
 	for (LinkedList<Star::Ball>::Node* firstIt = this->ballz.head; firstIt != NULL; firstIt = firstIt->next) {
 		for (LinkedList<Star::Ball>::Node* secondIt = firstIt->next; secondIt != NULL; secondIt = secondIt->next) {
 			int firstY = firstIt->data.location.y;
 			int secondY = secondIt->data.location.y;
-			if ((abs(firstY - secondY) <= 1) && (firstIt->data.direction != secondIt->data.direction)) {
+			if ((firstIt->data.location.x == secondIt->data.location.x) && (abs(firstY - secondY) <= 1) && (firstIt->data.direction != secondIt->data.direction)) {
 				toDeleteNodes.add(firstIt);
 				toDeleteNodes.add(secondIt);
-				Serial.println("oho s-or lovit coaie");
 			}
 		}
 	}
 
 	for (LinkedList<LinkedList<Star::Ball>::Node*>::Node* it = toDeleteNodes.head; it != NULL; it = it->next) {
-		this->ballz.remove(it->data);
+		if(it->data->data.location.y > 1) matrixcontroller->setLed(0, it->data->data.location.y, it->data->data.location.x, false);
+		this->ballz.remove(it->data->data);
 	}
+
+	if (toDeleteNodes.getLength() > 0) this->speakers.play(Audio::beep);
+	this->score += toDeleteNodes.getLength() / 2;
 }
 
 void Star::generateProjectile() {
@@ -112,8 +122,7 @@ void Star::generateProjectile() {
 	if (this->difficulty == DIFFICULTY_HARD) div = 3;
 
 	if (random(100) < (100 / div)) {
-		uint8_t randomX = random(1, 7);
-		this->ballz.add(Ball(Point(randomX, 7), DIRECTION_DOWN));
+		this->ballz.add(Ball(Point(random(1, 7), 7), DIRECTION_DOWN));
 	}
 }
 
@@ -132,7 +141,7 @@ void Star::moveBalls() {
 
 void Star::endGame(uint8_t end) {
 	this->lifes--;
-	EEPROM.write(this->highScoreAddress, 0);
+	// EEPROM.write(this->highScoreAddress, 0);
 	if (this->lifes == 0) {
 		this->printMessage("Game over!");
 		uint8_t hs = EEPROM.read(this->highScoreAddress);
@@ -143,15 +152,14 @@ void Star::endGame(uint8_t end) {
 		else {
 			this->printMessage("", 1);
 		}
-		this->gameStatus = WAITING_RESTART;
 	}
 	else {
 		this->printMessage("Try again!");
-		String lifes = "";
-		for (int i = 0; i < this->lifes; i++) lifes += char(223);
-		this->printMessage("Lifes " + lifes, 1);
-		this->gameStatus = WAITING_RESTART;
+		this->printMessage("Lifes ", 1);
+		for (int i = 0; i < this->lifes; i++) lcdcontroller->write(byte(0));
 	}
+	this->gameStatus = WAITING_RESTART;
+	this->speakers.play(Audio::gameOver);
 }
 
 void Star::onClick() {
@@ -159,10 +167,9 @@ void Star::onClick() {
 		this->shouldFire = true;
 	}
 	if (this->gameStatus == PAUSED) {
-		String lifes = "";
-		for (int i = 0; i < this->lifes; i++) lifes += char(223);
 		this->printMessage("Score " + String(score));
-		this->printMessage("Lifes " + lifes, 1);
+		this->printMessage("Lifes ", 1);
+		for (int i = 0; i < this->lifes; i++) lcdcontroller->write(byte(0));
 		this->gameStatus = RUNNING;
 	}
 	// init will put the game on pause also
@@ -172,13 +179,17 @@ void Star::onClick() {
 void Star::onDoubleClick() {}
 
 void Star::onLeftGesture(unsigned int power) {
-	this->direction = DIRECTION_LEFT;
-	// influenceSpeed(power);
+	if ((unsigned long)(millis() - this->lastMillis) > this->acceptInputInterval) {
+		this->direction = DIRECTION_LEFT;
+		influenceSpeed(power / 3);
+	}
 }
 
 void Star::onRightGesture(unsigned int power) {
-	this->direction = DIRECTION_RIGHT;
-	// influenceSpeed(power);
+	if ((unsigned long)(millis() - this->lastMillis) > this->acceptInputInterval) {
+		this->direction = DIRECTION_RIGHT;
+		influenceSpeed(power / 3);
+	}
 }
 
 void Star::onUpGesture(unsigned int power) {}
@@ -191,3 +202,8 @@ Star::Ball::Ball(Point location, uint8_t direction) {
 }
 
 Star::Ball::Ball() {}
+
+bool Star::Ball::operator ==(const Star::Ball& other) {
+	if ((this->location.x == other.location.x) && (this->location.y == other.location.y) && (this->direction == other.direction)) return true;
+	else return false;
+}

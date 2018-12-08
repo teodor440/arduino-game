@@ -16,6 +16,7 @@ private:
 		uint8_t direction;
 		Ball(Point location, uint8_t direction);
 		Ball();
+		bool operator==(const Ball&);
 	};
 
 	int highScoreAddress = 0x1;
@@ -27,6 +28,7 @@ private:
 	uint8_t lifes;
 
 	uint8_t difficulty;
+	unsigned long acceptInputInterval;
 
 	// Pretty much the animation of moving dots
 	void moveBalls();

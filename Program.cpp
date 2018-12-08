@@ -1,8 +1,8 @@
 #include "Program.h"
 
-Program::Program(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button) : Interactionable(joystick, button) {
+Program::Program(LedControl* matctrl, LiquidCrystal* lcdctrl, Joystick* joystick, uint8_t button) : Interactionable(joystick, button) {
 	this->matrixcontroller = matctrl;
-	this->lcdcontroller = ledctrl;
+	this->lcdcontroller = lcdctrl;
 
 	this->lastMillis = millis();
 }

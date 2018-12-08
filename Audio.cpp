@@ -16,4 +16,14 @@ void Audio::play(uint8_t song) {
 		delay(10);
 		analogWrite(this->buzzerPin, 0);
 	}
+	else if (song == this->gameOver) {
+		analogWrite(this->buzzerPin, 188);
+		delay(100);
+		analogWrite(this->buzzerPin, 0);
+	}
+	else if (song == this->gameStart) {
+		analogWrite(this->buzzerPin, 188);
+		delay(5);
+		analogWrite(this->buzzerPin, 0);
+	}
 }

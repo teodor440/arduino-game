@@ -32,6 +32,8 @@ void Snake::init() {
 
 	this->resetSpeed();
 
+	this->speakers.play(Audio::gameStart);
+
 #ifdef DEBUGGING_SNAKE
 	Serial.println("Snake game initialized captain");
 #endif
@@ -80,6 +82,8 @@ void Snake::onNewFrame() {
 
 		this->score++;
 		this->printMessage(String(this->score), 1);
+
+		this->speakers.play(Audio::beep);
 	}
 	else {
 		this->tail.add(Point(newX, newY));
@@ -115,6 +119,8 @@ void Snake::endGame(uint8_t end) {
 
 	this->tail.clear();
 	this->gameStatus = WAITING_RESTART;
+
+	this->speakers.play(Audio::gameOver);
 
 #ifdef DEBUGGING_SNAKE
 	Serial.println("Game ended and waiting to be restarted");

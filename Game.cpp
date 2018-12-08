@@ -4,7 +4,12 @@ Game::Game(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint
 	matctrl->clearDisplay(0);
 	ledctrl->clear();
 	this->speakers = Audio(buzzerPin);
+
+	// It would be likely a delay till the game begins so a click from joystick wouldnt affect
+	// It could be done from the joystick class if I'd wish but not necessary
 	delay(100);
+	this->nextDirection = DIRECTION_NONE;
+	this->clickCount = 0;
 }
 
 // Some values that work pretty well used here

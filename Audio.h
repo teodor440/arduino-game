@@ -14,6 +14,8 @@ private:
 	uint8_t buzzerPin;
 public:
 	static const uint8_t beep = 1;
+	static const uint8_t gameOver = 2;
+	static const uint8_t gameStart = 3;
 
 	Audio(uint8_t buzzerPin);
 	// Should never use an audio made this way

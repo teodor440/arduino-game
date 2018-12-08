@@ -8,6 +8,7 @@ GameSelector::GameSelector(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick
 	this->delayPeriod = 500;
 
 	this->lastBlink = millis();
+	this->lastGameSwitch = this->lastBlink;
 }
 
 void GameSelector::changeState(uint8_t state_index) {
@@ -22,7 +23,9 @@ void GameSelector::changeState(uint8_t state_index) {
 	for (int i = 0; i < COORDINATES_LENGTH - 1; i += 2) {
 		this->matrixcontroller->setLed(0, this->images[state_index][i], this->images[state_index][i + 1], true);
 	}
-	delay(1000);
+	// I would like to halt user input for a while
+	lastGameSwitch = millis();
+	this->nextDirection = DIRECTION_NONE;
 }
 
 void GameSelector::advanceState() {
@@ -64,11 +67,11 @@ void GameSelector::onClick() {
 }
 
 void GameSelector::onUpGesture(unsigned int power) {
-	nextDirection = DIRECTION_UP;
+	if((unsigned long)(millis() - this->lastGameSwitch) > this->acceptInputInterval) nextDirection = DIRECTION_UP;
 }
 
 void GameSelector::onDownGesture(unsigned int power) {
-	nextDirection = DIRECTION_DOWN;
+	if ((unsigned long)(millis() - this->lastGameSwitch) > this->acceptInputInterval) nextDirection = DIRECTION_DOWN;
 }
 
 void GameSelector::onDoubleClick() {}

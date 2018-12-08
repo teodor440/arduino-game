@@ -15,6 +15,9 @@
 // TODO DRAW SHIT ON MATRIX
 class GameSelector : Program {
 private:
+	unsigned long lastGameSwitch;
+	unsigned long acceptInputInterval = 400;
+
 	const uint8_t gamesCount = GAME_COUNT;
 	String gameNames[GAME_COUNT] = { "Snake", "Star Invaders" };
 	uint8_t gamesMapCodes[GAME_COUNT] = { SNAKE, STAR };

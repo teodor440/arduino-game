@@ -31,12 +31,24 @@ LiquidCrystal lcdController = LiquidCrystal(LCD_RS, LCD_EN, D4, D5, D6, D7);
 Program* currentRunningProgram;
 
 void setup() {
-	// Serial opened for debugging
-	Serial.begin(9600);
+	// Serial may be opened for debugging
+	// Serial.begin(9600);
+
 	// Some one time setup for devices
 	matrixController.shutdown(0, false); // turn off power saving, enables display
 	matrixController.setIntensity(0, 2); // sets brightness (0~15 possible values)
 	matrixController.clearDisplay(0);// clear screen
+
+	byte hearth[8] = {
+	  B00000,
+	  B00000,
+	  B00000,
+	  B01010,
+	  B11111,
+	  B01110,
+	  B00100,
+	};
+	lcdController.createChar(0, hearth);
 	lcdController.begin(LCD_COLS, LCD_ROWS);
 	// Set current running interface
 	currentRunningProgram = (Program*) new GameSelector(&matrixController, &lcdController, &joystick, BUTTON);
