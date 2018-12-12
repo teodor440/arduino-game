@@ -125,12 +125,16 @@
       <ForcedIncludeFiles>$(ProjectDir)__vm\.App.vsarduino.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
       <WholeProgramOptimization>false</WholeProgramOptimization>
       <PreprocessorDefinitions>__AVR_ATmega328p__;__AVR_ATmega328P__;F_CPU=16000000L;ARDUINO=10807;ARDUINO_AVR_UNO;ARDUINO_ARCH_AVR;__cplusplus=201103L;_VMICRO_INTELLISENSE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="App.ino">
@@ -145,7 +149,7 @@
     <ClInclude Include="Joystick.h" />
     <ClInclude Include="Program.h" />
     <ClInclude Include="Snake.h" />
-    <ClInclude Include="StarGame.h" />
+    <ClInclude Include="StarInvaders.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="__vm\.App.vsarduino.h" />
   </ItemGroup>
@@ -157,7 +161,7 @@
     <ClCompile Include="Joystick.cpp" />
     <ClCompile Include="Program.cpp" />
     <ClCompile Include="Snake.cpp" />
-    <ClCompile Include="StarGame.cpp" />
+    <ClCompile Include="StarInvaders.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -32,7 +32,6 @@ protected:
 	// Has methods to play sounds
 	Audio speakers;
 
-	uint8_t frameCount = 0;
 	uint8_t gameStatus;
 	
 	uint8_t score = 0;

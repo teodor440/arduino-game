@@ -1,10 +1,10 @@
-﻿#include "StarGame.h"
+﻿#include "StarInvaders.h"
 
-Star::Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t buzzerPin) : lifes(0), difficulty(DIFFICULTY_MEDIUM), Game(matctrl, ledctrl, joystick, button, buzzerPin) {
+StarInvaders::StarInvaders(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick* joystick, uint8_t button, uint8_t buzzerPin) : lifes(0), difficulty(DIFFICULTY_MEDIUM), Game(matctrl, ledctrl, joystick, button, buzzerPin) {
 	init();
 }
 
-void Star::init() {
+void StarInvaders::init() {
 	this->resetSpeed();
 	this->acceptInputInterval = this->delayPeriod / 5;
 	this->matrixcontroller->clearDisplay(0);
@@ -33,7 +33,7 @@ void Star::init() {
 	this->speakers.play(Audio::gameStart);
 }
 
-void Star::onNewFrame() {
+void StarInvaders::onNewFrame() {
 	if (this->difficulty == DIFFICULTY_EASY) this->changeBasisPace(0.998);
 	if (this->difficulty == DIFFICULTY_MEDIUM) this->changeBasisPace(0.997);
 	if (this->difficulty == DIFFICULTY_HARD) this->changeBasisPace(0.996);
@@ -73,16 +73,16 @@ void Star::onNewFrame() {
 	this->processBallsInteraction();
 }
 
-void Star::launchProjectile(uint8_t x) {
+void StarInvaders::launchProjectile(uint8_t x) {
 	this->ballz.add(Ball(Point(x, 1), DIRECTION_UP));
 }
 
-void Star::processBallsInteraction() {
-	LinkedList<Star::Ball> newL;
+void StarInvaders::processBallsInteraction() {
+	LinkedList<StarInvaders::Ball> newL;
 
-	LinkedList<LinkedList<Star::Ball>::Node*> toDeleteNodes;
+	LinkedList<LinkedList<StarInvaders::Ball>::Node*> toDeleteNodes;
 	// Check if balls hit the wallz
-	for (LinkedList<Star::Ball>::Node* it = this->ballz.head; it != NULL; it = it->next) {
+	for (LinkedList<StarInvaders::Ball>::Node* it = this->ballz.head; it != NULL; it = it->next) {
 		if (it->data.location.y > 7) toDeleteNodes.add(it);
 		if (it->data.location.y == 0) {
 			this->endGame(GAME_LOST);
@@ -90,13 +90,13 @@ void Star::processBallsInteraction() {
 		}
 	}
 
-	for (LinkedList<LinkedList<Star::Ball>::Node*>::Node* it = toDeleteNodes.head; it != NULL; it = it->next) {
+	for (LinkedList<LinkedList<StarInvaders::Ball>::Node*>::Node* it = toDeleteNodes.head; it != NULL; it = it->next) {
 		this->ballz.remove(it->data->data);
 	}
 	toDeleteNodes.clear();
 
-	for (LinkedList<Star::Ball>::Node* firstIt = this->ballz.head; firstIt != NULL; firstIt = firstIt->next) {
-		for (LinkedList<Star::Ball>::Node* secondIt = firstIt->next; secondIt != NULL; secondIt = secondIt->next) {
+	for (LinkedList<StarInvaders::Ball>::Node* firstIt = this->ballz.head; firstIt != NULL; firstIt = firstIt->next) {
+		for (LinkedList<StarInvaders::Ball>::Node* secondIt = firstIt->next; secondIt != NULL; secondIt = secondIt->next) {
 			int firstY = firstIt->data.location.y;
 			int secondY = secondIt->data.location.y;
 			if ((firstIt->data.location.x == secondIt->data.location.x) && (abs(firstY - secondY) <= 1) && (firstIt->data.direction != secondIt->data.direction)) {
@@ -106,7 +106,7 @@ void Star::processBallsInteraction() {
 		}
 	}
 
-	for (LinkedList<LinkedList<Star::Ball>::Node*>::Node* it = toDeleteNodes.head; it != NULL; it = it->next) {
+	for (LinkedList<LinkedList<StarInvaders::Ball>::Node*>::Node* it = toDeleteNodes.head; it != NULL; it = it->next) {
 		if(it->data->data.location.y > 1) matrixcontroller->setLed(0, it->data->data.location.y, it->data->data.location.x, false);
 		this->ballz.remove(it->data->data);
 	}
@@ -115,7 +115,7 @@ void Star::processBallsInteraction() {
 	this->score += toDeleteNodes.getLength() / 2;
 }
 
-void Star::generateProjectile() {
+void StarInvaders::generateProjectile() {
 	long div = 1;
 	if (this->difficulty == DIFFICULTY_EASY) div = 5;
 	if (this->difficulty == DIFFICULTY_MEDIUM) div = 4;
@@ -126,8 +126,8 @@ void Star::generateProjectile() {
 	}
 }
 
-void Star::moveBalls() {
-	for (LinkedList<Star::Ball>::Node* it = this->ballz.head; it != NULL; it = it->next) {
+void StarInvaders::moveBalls() {
+	for (LinkedList<StarInvaders::Ball>::Node* it = this->ballz.head; it != NULL; it = it->next) {
 		matrixcontroller->setLed(0, it->data.location.y, it->data.location.x, false);
 		if (it->data.direction == DIRECTION_UP) {
 			it->data.location.y++;
@@ -139,7 +139,7 @@ void Star::moveBalls() {
 	}
 }
 
-void Star::endGame(uint8_t end) {
+void StarInvaders::endGame(uint8_t end) {
 	this->lifes--;
 	// EEPROM.write(this->highScoreAddress, 0);
 	if (this->lifes == 0) {
@@ -162,7 +162,7 @@ void Star::endGame(uint8_t end) {
 	this->speakers.play(Audio::gameOver);
 }
 
-void Star::onClick() {
+void StarInvaders::onClick() {
 	if (this->gameStatus == RUNNING) {
 		this->shouldFire = true;
 	}
@@ -176,34 +176,34 @@ void Star::onClick() {
 	if (this->gameStatus == WAITING_RESTART) this->init();
 }
 
-void Star::onDoubleClick() {}
+void StarInvaders::onDoubleClick() {}
 
-void Star::onLeftGesture(unsigned int power) {
+void StarInvaders::onLeftGesture(unsigned int power) {
 	if ((unsigned long)(millis() - this->lastMillis) > this->acceptInputInterval) {
 		this->direction = DIRECTION_LEFT;
 		influenceSpeed(power / 3);
 	}
 }
 
-void Star::onRightGesture(unsigned int power) {
+void StarInvaders::onRightGesture(unsigned int power) {
 	if ((unsigned long)(millis() - this->lastMillis) > this->acceptInputInterval) {
 		this->direction = DIRECTION_RIGHT;
 		influenceSpeed(power / 3);
 	}
 }
 
-void Star::onUpGesture(unsigned int power) {}
+void StarInvaders::onUpGesture(unsigned int power) {}
 
-void Star::onDownGesture(unsigned int power) {}
+void StarInvaders::onDownGesture(unsigned int power) {}
 
-Star::Ball::Ball(Point location, uint8_t direction) {
+StarInvaders::Ball::Ball(Point location, uint8_t direction) {
 	this->location = location;
 	this->direction = direction;
 }
 
-Star::Ball::Ball() {}
+StarInvaders::Ball::Ball() {}
 
-bool Star::Ball::operator ==(const Star::Ball& other) {
+bool StarInvaders::Ball::operator ==(const StarInvaders::Ball& other) {
 	if ((this->location.x == other.location.x) && (this->location.y == other.location.y) && (this->direction == other.direction)) return true;
 	else return false;
 }

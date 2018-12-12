@@ -1,7 +1,7 @@
 #include "Program.h"
 #include "GameSelector.h"
 #include "Snake.h"
-#include "StarGame.h"
+#include "StarInvaders.h"
 
 #define VERTICAL_PIN A0
 #define HORIZONTAL_PIN A1
@@ -70,7 +70,7 @@ void loop() {
 		break;
 	case STAR:
 		delete currentRunningProgram;
-		currentRunningProgram = (Program*) new Star(&matrixController, &lcdController, &joystick, BUTTON, BUZZER_PIN);
+		currentRunningProgram = (Program*) new StarInvaders(&matrixController, &lcdController, &joystick, BUTTON, BUZZER_PIN);
 		break;
 	default:
 		break;

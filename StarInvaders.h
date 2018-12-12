@@ -1,5 +1,5 @@
-#ifndef _STARGAME_h
-#define _STARGAME_h
+#ifndef _STARINVADERS_h
+#define _STARINVADERS_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 	#include "arduino.h"
@@ -9,7 +9,7 @@
 
 #include "Game.h"
 
-class Star : public Game {
+class StarInvaders : public Game {
 private:
 	struct Ball {
 		Point location;
@@ -43,7 +43,7 @@ protected:
 	virtual void onNewFrame();
 	virtual void endGame(uint8_t);
 public:
-	Star(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button, uint8_t buzzerPin);
+	StarInvaders(LedControl* matctrl, LiquidCrystal* ledctrl, Joystick*, uint8_t button, uint8_t buzzerPin);
 
 	virtual void onClick();
 	virtual void onDoubleClick();

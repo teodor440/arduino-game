@@ -19,7 +19,7 @@ private:
 	unsigned long acceptInputInterval = 400;
 
 	const uint8_t gamesCount = GAME_COUNT;
-	String gameNames[GAME_COUNT] = { "Snake", "Star Invaders" };
+	String gameNames[GAME_COUNT] = { "Snake", "StarInvaders Invaders" };
 	uint8_t gamesMapCodes[GAME_COUNT] = { SNAKE, STAR };
 	uint8_t images[GAME_COUNT][COORDINATES_LENGTH] = {
 		{2, 1, 2, 2, 3, 2, 4, 2, 4, 3, 4, 5},
