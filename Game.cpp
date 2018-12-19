@@ -33,7 +33,6 @@ void Game::changeBasisPace(float percentage) {
 uint8_t Game::run() {
 	// First we should check if we want to quit
 	// First increment number of readings not to divide by 0 in case of a gesture
-	// this->numberOfReadings++;
 	this->processInput();
 	if (this->shutdownTrigger) return PROGRAM_SELECTOR;
 	if (this->gameStatus == RUNNING) {

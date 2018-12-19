@@ -91,9 +91,12 @@ void Snake::onNewFrame() {
 		this->matrixcontroller->setLed(0, newY, newX, true);
 
 		Point deletePoint = this->tail.getTail();
-		this->matrixMap[deletePoint.y][deletePoint.x] = 0;
 		this->tail.remove_tail();
-		this->matrixcontroller->setLed(0, deletePoint.y, deletePoint.x, false);
+		// Shouldn't turn off the tail of snake if the head is there now
+		if (!(newX == deletePoint.x && newY == deletePoint.y)) {
+			this->matrixMap[deletePoint.y][deletePoint.x] = 0;
+			this->matrixcontroller->setLed(0, deletePoint.y, deletePoint.x, false);
+		}
 	}
 }
 
@@ -136,8 +139,8 @@ Point Snake::generateRandomFood() {
 		for (int j = 0; (j < 8) && !finished; j++) {
 			if (this->matrixMap[i][j] == 0) {
 				if (currentCount == randomCount) {
-					x = i;
-					y = j;
+					y = i;
+					x = j;
 					finished = true;
 				}
 				currentCount++;
